@@ -412,18 +412,21 @@ function renderBranchedNaming() {
   const rule = $('#substituentRule');
   if (rule) rule.textContent = BRANCHED_NAMING.substituentRule;
 
-  // Substituent table
+  // Substituent table (expanded with structure column)
   const tbody = $('#substituentTableBody');
   if (tbody) {
     tbody.innerHTML = SUBSTITUENTS.map(s => `
       <tr>
-        <td style="font-family: var(--font-mono); color: var(--accent-green);">${s.name.replace('yl','ane')}</td>
+        <td style="font-family: var(--font-mono); color: var(--accent-green);">${s.name.replace('yl','ane').replace('sec-butane','butane').replace('tert-butane','2-methylpropane').replace('vinylane','ethene').replace('phenylane','benzene')}</td>
         <td style="font-family: var(--font-mono); font-weight: 600; color: var(--accent-orange);">${s.name} (${s.jp})</td>
         <td style="font-family: var(--font-mono);">${s.formula}</td>
         <td style="font-size: 12px; color: var(--text-secondary);">${s.origin}</td>
       </tr>
     `).join('');
   }
+
+  // Alkyl group classification
+  renderAlkylGroups();
 
   // Branched naming steps
   const stepsContainer = $('#branchedSteps');
@@ -462,6 +465,29 @@ function renderBranchedNaming() {
       </div>
     `).join('');
   }
+}
+
+function renderAlkylGroups() {
+  const intro = $('#alkylGroupIntro');
+  if (intro) intro.textContent = ALKYL_GROUP_RULES.intro;
+  
+  const formula = $('#alkylGroupFormula');
+  if (formula) formula.textContent = ALKYL_GROUP_RULES.generalFormula;
+  
+  const types = $('#alkylGroupTypes');
+  if (types) {
+    const colors = ['var(--accent-green)', 'var(--accent-blue)', 'var(--accent-purple)'];
+    types.innerHTML = ALKYL_GROUP_RULES.types.map((t, i) => `
+      <div style="padding:10px; border-radius:8px; background:rgba(0,0,0,0.08); margin-bottom:8px; border-left:3px solid ${colors[i]};">
+        <div style="font-size:14px; font-weight:600; color:${colors[i]}; margin-bottom:4px;">${t.type}</div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-bottom:4px;">${t.desc}</div>
+        <div style="font-size:12px; font-family:var(--font-mono); color:var(--text-muted);">例: ${t.example}</div>
+      </div>
+    `).join('');
+  }
+  
+  const tip = $('#alkylGroupTip');
+  if (tip) tip.textContent = ALKYL_GROUP_RULES.tip;
 }
 
 // ============================================================
@@ -1042,22 +1068,47 @@ function shuffleFGFlashcards() {
 }
 
 // ============================================================
-//  Fill-in Test
+//  Fill-in Test (Multiple Choice)
 // ============================================================
 function renderFillIn() {
   const el = $('#fillInTest');
   if (!el) return;
+  const allAnswers = FILL_IN_TEST.map(q => q.answer);
   const questions = shuffleArray([...FILL_IN_TEST]).slice(0, 8);
-  el.innerHTML = questions.map((q, i) => `
-    <div style="margin-bottom:10px; padding:10px; border-radius:8px; background:rgba(0,0,0,0.06);" data-answer="${q.answer}" class="fill-in-item">
-      <div style="font-size:13px; color:var(--text-primary); margin-bottom:6px;">${i + 1}. ${q.q}</div>
-      <div style="display:flex; gap:8px; align-items:center;">
-        <input type="text" class="fill-in-input" placeholder="答えを入力..." style="flex:1; padding:6px 10px; border-radius:6px; border:1px solid var(--border-glass); background:var(--bg-glass); color:var(--text-primary); font-size:13px; font-family:var(--font-mono); outline:none;">
-        <button class="btn btn-sm" onclick="this.previousElementSibling.placeholder='💡 ${q.hint}'" style="font-size:11px;">ヒント</button>
+  
+  el.innerHTML = questions.map((q, i) => {
+    // Generate 3 wrong options from other answers
+    const wrongOptions = shuffleArray(allAnswers.filter(a => a !== q.answer)).slice(0, 3);
+    const options = shuffleArray([q.answer, ...wrongOptions]);
+    
+    return `
+      <div style="margin-bottom:12px; padding:12px; border-radius:10px; background:rgba(0,0,0,0.06);" data-answer="${q.answer}" class="fill-in-item">
+        <div style="font-size:13px; color:var(--text-primary); margin-bottom:8px; font-weight:500;">${i + 1}. ${q.q}</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+          ${options.map(opt => `
+            <button class="fill-in-option btn" onclick="selectFillInOption(this)" data-value="${opt}" style="font-size:12px; padding:8px; text-align:left; cursor:pointer; border:1px solid var(--border-glass); border-radius:6px; background:var(--bg-glass); color:var(--text-primary);">
+              ${opt}
+            </button>
+          `).join('')}
+        </div>
+        <div class="fill-in-feedback" style="font-size:12px; margin-top:6px;"></div>
       </div>
-      <div class="fill-in-feedback" style="font-size:12px; margin-top:4px;"></div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
+}
+
+function selectFillInOption(btn) {
+  // Deselect siblings
+  btn.parentElement.querySelectorAll('.fill-in-option').forEach(b => {
+    b.style.borderColor = 'var(--border-glass)';
+    b.style.background = 'var(--bg-glass)';
+    b.style.fontWeight = 'normal';
+  });
+  // Select this
+  btn.style.borderColor = 'var(--accent-cyan)';
+  btn.style.background = 'rgba(34,211,238,0.08)';
+  btn.style.fontWeight = '600';
+  btn.parentElement.dataset.selected = btn.dataset.value;
 }
 
 function checkFillIn() {
@@ -1065,21 +1116,29 @@ function checkFillIn() {
   let correct = 0;
   items.forEach(item => {
     const answer = item.dataset.answer;
-    const input = item.querySelector('.fill-in-input');
+    const selected = item.querySelector('.fill-in-option[style*="font-weight: 600"], .fill-in-option[style*="font-weight:600"]');
     const fb = item.querySelector('.fill-in-feedback');
-    const userAnswer = input.value.trim();
+    const userAnswer = selected ? selected.dataset.value : '';
     
-    // Flexible matching: normalize and check contains
-    const normalize = s => s.toLowerCase().replace(/[\s　\-\(\)（）]/g, '');
-    const isCorrect = normalize(userAnswer).includes(normalize(answer)) || normalize(answer).includes(normalize(userAnswer));
+    // Highlight all options
+    item.querySelectorAll('.fill-in-option').forEach(btn => {
+      if (btn.dataset.value === answer) {
+        btn.style.borderColor = 'var(--accent-green)';
+        btn.style.background = 'rgba(74,222,128,0.12)';
+      } else if (btn === selected) {
+        btn.style.borderColor = 'var(--accent-red)';
+        btn.style.background = 'rgba(239,68,68,0.08)';
+      }
+      btn.style.pointerEvents = 'none';
+    });
     
-    if (isCorrect && userAnswer.length > 0) {
+    if (userAnswer === answer) {
       correct++;
       fb.innerHTML = `<span style="color:var(--accent-green);">✅ 正解！</span>`;
-      input.style.borderColor = 'var(--accent-green)';
-    } else {
+    } else if (userAnswer) {
       fb.innerHTML = `<span style="color:var(--accent-red);">❌ 正解: <strong>${answer}</strong></span>`;
-      input.style.borderColor = 'var(--accent-red)';
+    } else {
+      fb.innerHTML = `<span style="color:var(--text-muted);">未回答 → 正解: <strong>${answer}</strong></span>`;
     }
   });
   

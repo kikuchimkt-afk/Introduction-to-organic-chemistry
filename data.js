@@ -378,11 +378,31 @@ const AROMATIC_QUIZ = [
 //  Module 2 追加: 分岐鎖（枝分かれ）の命名法
 // --------------------------------------------------
 const SUBSTITUENTS = [
-  { carbon: 1, name: "methyl", jp: "メチル基", formula: "-CH₃", origin: "メタン(methane)から水素1つ除いたもの" },
-  { carbon: 2, name: "ethyl", jp: "エチル基", formula: "-C₂H₅", origin: "エタン(ethane)から水素1つ除いたもの" },
-  { carbon: 3, name: "propyl", jp: "プロピル基", formula: "-C₃H₇", origin: "プロパン(propane)から水素1つ除いたもの" },
-  { carbon: 3, name: "isopropyl", jp: "イソプロピル基", formula: "-CH(CH₃)₂", origin: "枝分かれした3炭素の置換基" },
+  { carbon: 1, name: "methyl", jp: "メチル基", formula: "-CH₃", structure: "−CH₃", origin: "メタン(methane)のHを1つ除いたもの", generalFormula: "CₙH₂ₙ₊₁ (n=1)" },
+  { carbon: 2, name: "ethyl", jp: "エチル基", formula: "-C₂H₅", structure: "−CH₂CH₃", origin: "エタン(ethane)のHを1つ除いたもの", generalFormula: "CₙH₂ₙ₊₁ (n=2)" },
+  { carbon: 3, name: "propyl", jp: "プロピル基", formula: "-C₃H₇", structure: "−CH₂CH₂CH₃", origin: "プロパン(propane)の末端Hを1つ除いたもの", generalFormula: "CₙH₂ₙ₊₁ (n=3)" },
+  { carbon: 3, name: "isopropyl", jp: "イソプロピル基", formula: "-CH(CH₃)₂", structure: "−CH(CH₃)₂", origin: "プロパンの中央のHを除いたもの（分岐型）", generalFormula: "CₙH₂ₙ₊₁ (n=3, 分岐)" },
+  { carbon: 4, name: "butyl", jp: "ブチル基", formula: "-C₄H₉", structure: "−CH₂CH₂CH₂CH₃", origin: "ブタン(butane)の末端Hを1つ除いたもの", generalFormula: "CₙH₂ₙ₊₁ (n=4)" },
+  { carbon: 4, name: "sec-butyl", jp: "sec-ブチル基", formula: "-CH(CH₃)C₂H₅", structure: "−CH(CH₃)CH₂CH₃", origin: "ブタンの2番炭素のHを除いたもの（第2級）", generalFormula: "CₙH₂ₙ₊₁ (n=4, 第2級)" },
+  { carbon: 4, name: "tert-butyl", jp: "tert-ブチル基", formula: "-C(CH₃)₃", structure: "−C(CH₃)₃", origin: "2-メチルプロパンの中心Cから分岐（第3級）", generalFormula: "CₙH₂ₙ₊₁ (n=4, 第3級)" },
+  { carbon: 2, name: "vinyl", jp: "ビニル基", formula: "-CH=CH₂", structure: "−CH=CH₂", origin: "エテン(ethene)のHを1つ除いたもの（不飽和）", generalFormula: "C₂H₃" },
+  { carbon: 6, name: "phenyl", jp: "フェニル基", formula: "-C₆H₅", structure: "−C₆H₅ (⬡)", origin: "ベンゼン(benzene)のHを1つ除いたもの（芳香族）", generalFormula: "C₆H₅" },
 ];
+
+// アルキル基の命名ルール解説
+const ALKYL_GROUP_RULES = {
+  title: 'アルキル基 — 置換基の名前と構造',
+  intro: 'アルカンからHを1つ取り除いた残りの部分を「アルキル基」と呼びます。枝分かれした化合物の命名に不可欠です。',
+  rule: 'アルカンの語尾 -ane を -yl に変える → アルキル基の名前になる',
+  examples: 'methane → methyl、ethane → ethyl、propane → propyl',
+  generalFormula: 'アルキル基の一般式: CₙH₂ₙ₊₁-',
+  types: [
+    { type: '第1級 (primary)', desc: '結合する炭素に他の炭素が0〜1個だけつながっている。直鎖末端型。', example: 'methyl, ethyl, propyl, butyl' },
+    { type: '第2級 (secondary)', desc: '結合する炭素に他の炭素が2個つながっている。鎖の途中型。', example: 'isopropyl, sec-butyl' },
+    { type: '第3級 (tertiary)', desc: '結合する炭素に他の炭素が3個つながっている。十字路型。', example: 'tert-butyl' }
+  ],
+  tip: '🔬 置換基の名前を作るルールは簡単: アルカン名の -ane → -yl。methane→methyl, ethane→ethyl。接頭辞はそのまま！覚える量が増えるのではなく、同じ知識の再利用です。'
+};
 
 const BRANCHED_NAMING = {
   intro: "直鎖だけでなく、枝分かれ（分岐）した炭化水素も体系的に命名できます。置換基の「名前」「位置番号」「数」を主鎖名の前に付けるのがルールです。",
