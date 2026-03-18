@@ -222,8 +222,8 @@
 
       .ws-table td {
         color: #000;
-        padding: 2pt 2pt;
-        height: 68pt;
+        padding: 1pt 2pt;
+        height: 58pt;
       }
 
       /* Column widths */
@@ -597,7 +597,10 @@
       let html = `
         <div class="sheet-title">${info.title} ${label}</div>
         <div class="sheet-subtitle">${info.subtitle}</div>
-        <div class="name-field">名前: <span>&nbsp;</span></div>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:3pt;">
+          <div style="display:flex; align-items:center; gap:4pt;"><img src="https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=https://introduction-to-organic-chemistry.vercel.app/" style="width:45pt;height:45pt;"><span style="font-size:5.5pt;color:#999;">アプリで学習</span></div>
+          <div class="name-field" style="margin-bottom:0;">名前: <span>&nbsp;</span></div>
+        </div>
         <table class="ws-table">
           <thead>
             <tr>
@@ -636,7 +639,7 @@
           </tbody>
         </table>
         <div class="sheet-tip">${info.tip}</div>
-        <div class="sheet-footer"><img class="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://introduction-to-organic-chemistry.vercel.app/" alt="QR"><span>有機化学 入門ナビ — 演習プリント ${label}<br>https://introduction-to-organic-chemistry.vercel.app/</span></div>
+        <div class="sheet-footer">有機化学 入門ナビ — 演習プリント ${label}</div>
       `;
 
       const prefix = blank ? 'blank' : 'answer';
@@ -662,7 +665,10 @@
       let html = `
         <div class="sheet-title">官能基テスト ${label}</div>
         <div class="sheet-subtitle">官能基の名称・構造式・接尾辞・代表化合物・性質を確認</div>
-        <div class="name-field">名前: <span>&nbsp;</span></div>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:3pt;">
+          <div style="display:flex; align-items:center; gap:4pt;"><img src="https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=https://introduction-to-organic-chemistry.vercel.app/" style="width:45pt;height:45pt;"><span style="font-size:5.5pt;color:#999;">アプリで学習</span></div>
+          <div class="name-field" style="margin-bottom:0;">名前: <span>&nbsp;</span></div>
+        </div>
         <table class="ws-table">
           <thead>
             <tr>
@@ -694,7 +700,7 @@
           </tbody>
         </table>
         <div class="sheet-tip">💡 官能基は有機化合物の「性格」を決定する部分構造。構造式と接尾辞のセットで覚える。</div>
-        <div class="sheet-footer"><img class="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://introduction-to-organic-chemistry.vercel.app/" alt="QR"><span>有機化学 入門ナビ — 官能基テスト ${label}<br>https://introduction-to-organic-chemistry.vercel.app/</span></div>
+        <div class="sheet-footer">有機化学 入門ナビ — 官能基テスト ${label}</div>
       `;
       const prefix = blank ? 'blank' : 'answer';
       document.getElementById(`sheet-${prefix}-fg`).innerHTML = html;
@@ -716,7 +722,10 @@
       let html = `
         <div class="sheet-title">芳香族化合物テスト ${label}</div>
         <div class="sheet-subtitle">代表的な芳香族化合物の名称・分子式・IUPAC名・特徴を確認</div>
-        <div class="name-field">名前: <span>&nbsp;</span></div>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:3pt;">
+          <div style="display:flex; align-items:center; gap:4pt;"><img src="https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=https://introduction-to-organic-chemistry.vercel.app/" style="width:45pt;height:45pt;"><span style="font-size:5.5pt;color:#999;">アプリで学習</span></div>
+          <div class="name-field" style="margin-bottom:0;">名前: <span>&nbsp;</span></div>
+        </div>
         <table class="ws-table">
           <thead>
             <tr>
@@ -748,7 +757,7 @@
           </tbody>
         </table>
         <div class="sheet-tip">💡 芳香族化合物はベンゼン環を含む化合物。慣用名が多いが、IUPAC名も確認しておこう。二置換ベンゼンはo-(1,2)/m-(1,3)/p-(1,4)で位置を表す。</div>
-        <div class="sheet-footer"><img class="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://introduction-to-organic-chemistry.vercel.app/" alt="QR"><span>有機化学 入門ナビ — 芳香族テスト ${label}<br>https://introduction-to-organic-chemistry.vercel.app/</span></div>
+        <div class="sheet-footer">有機化学 入門ナビ — 芳香族テスト ${label}</div>
       `;
       const prefix = blank ? 'blank' : 'answer';
       document.getElementById(`sheet-${prefix}-aromatic`).innerHTML = html;
