@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>有機化学 演習プリント</title>
+  <style>
+    /* ===== Screen styles ===== */
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    :root {
+      --bg: #0f1219;
+      --text: #e4e8f0;
+      --text-muted: #7a8299;
+      --accent-green: #4ade80;
+      --accent-blue: #60a5fa;
+      --accent-purple: #c084fc;
+      --border: rgba(255,255,255,0.08);
+      --glass: rgba(255,255,255,0.03);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 32px;
+    }
+
+    .screen-only { display: block; }
+
+    .page-header {
+      max-width: 800px;
+      margin: 0 auto 32px;
+      text-align: center;
+    }
+
+    .page-header h1 {
+      font-size: 22px;
+      color: var(--accent-green);
+      margin-bottom: 8px;
+    }
+
+    .page-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .print-options {
+      max-width: 800px;
+      margin: 0 auto 24px;
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .print-btn {
+      padding: 14px 28px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--glass);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .print-btn:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.15);
+      transform: translateY(-2px);
+    }
+
+    .print-btn.alkane { border-color: rgba(74, 222, 128, 0.3); }
+    .print-btn.alkane:hover { box-shadow: 0 4px 20px rgba(74, 222, 128, 0.15); }
+    .print-btn.alkene { border-color: rgba(96, 165, 250, 0.3); }
+    .print-btn.alkene:hover { box-shadow: 0 4px 20px rgba(96, 165, 250, 0.15); }
+    .print-btn.alkyne { border-color: rgba(192, 132, 252, 0.3); }
+    .print-btn.alkyne:hover { box-shadow: 0 4px 20px rgba(192, 132, 252, 0.15); }
+
+    .print-btn .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .print-btn.alkane .dot { background: var(--accent-green); }
+    .print-btn.alkene .dot { background: var(--accent-blue); }
+    .print-btn.alkyne .dot { background: var(--accent-purple); }
+
+    .print-all-btn {
+      padding: 14px 32px;
+      border: 1px solid rgba(74, 222, 128, 0.3);
+      border-radius: 12px;
+      background: rgba(74, 222, 128, 0.08);
+      color: var(--accent-green);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: block;
+      margin: 16px auto 0;
+    }
+
+    .print-all-btn:hover {
+      background: rgba(74, 222, 128, 0.15);
+      box-shadow: 0 4px 20px rgba(74, 222, 128, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 24px;
+      color: var(--text-muted);
+      font-size: 13px;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      color: var(--text);
+    }
+
+    /* ===== Print worksheet (hidden on screen) ===== */
+    .print-sheet {
+      display: none;
+    }
+
+    /* ===== Print styles ===== */
+    @media print {
+      .screen-only { display: none !important; }
+      .print-sheet { display: block !important; }
+      .print-sheet.print-hidden { display: none !important; }
+
+      @page {
+        size: A4 portrait;
+        margin: 8mm 10mm 8mm 10mm;
+      }
+
+      body {
+        background: white;
+        color: #000;
+        padding: 0;
+        margin: 0;
+        font-size: 10pt;
+      }
+
+      .print-sheet {
+        page-break-after: always;
+        width: 100%;
+      }
+
+      .print-sheet:last-child {
+        page-break-after: avoid;
+      }
+
+      .sheet-title {
+        text-align: center;
+        font-size: 14pt;
+        font-weight: 700;
+        margin-bottom: 2pt;
+        color: #000;
+        flex-shrink: 0;
+      }
+
+      .sheet-subtitle {
+        text-align: center;
+        font-size: 8pt;
+        color: #555;
+        margin-bottom: 3pt;
+        flex-shrink: 0;
+      }
+
+      .name-field {
+        font-size: 9pt;
+        text-align: right;
+        margin-bottom: 3pt;
+        color: #000;
+        flex-shrink: 0;
+      }
+
+      .name-field span {
+        display: inline-block;
+        width: 120pt;
+        border-bottom: 0.5pt solid #000;
+        margin-left: 4pt;
+      }
+
+      .ws-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        flex: 1;
+      }
+
+      .ws-table th,
+      .ws-table td {
+        border: 0.3pt solid #999;
+        padding: 0;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 9pt;
+      }
+
+      .ws-table th {
+        background: #f5f5f5;
+        font-weight: 700;
+        font-size: 8pt;
+        padding: 3pt 2pt;
+        color: #333;
+        height: 20pt;
+      }
+
+      .ws-table td {
+        color: #000;
+        padding: 2pt 2pt;
+        height: 68pt;
+      }
+
+      /* Column widths */
+      .ws-table .col-c { width: 7%; }
+      .ws-table .col-formula { width: 13%; }
+      .ws-table .col-en { width: 16%; }
+      .ws-table .col-jp { width: 14%; }
+      .ws-table .col-structure { width: 50%; }
+
+      .ws-table td.structure-cell {
+        text-align: left;
+        padding-left: 4pt;
+        padding-right: 2pt;
+      }
+
+      .ws-table td.structure-cell pre {
+        font-family: 'JetBrains Mono', 'Courier New', monospace;
+        font-size: 6.5pt;
+        line-height: 1.15;
+        margin: 0;
+        white-space: pre;
+        color: #000;
+      }
+
+      .sheet-footer {
+        margin-top: 2pt;
+        font-size: 6.5pt;
+        color: #aaa;
+        text-align: center;
+        flex-shrink: 0;
+      }
+
+      .sheet-tip {
+        margin-top: 2pt;
+        font-size: 7pt;
+        color: #666;
+        padding: 2pt 6pt;
+        border: 0.3pt solid #ccc;
+        border-radius: 2pt;
+        background: #fafafa;
+        flex-shrink: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Screen UI ===== -->
+  <div class="screen-only">
+    <div class="page-header">
+      <h1>🖨️ 演習プリント — 学習サイクル</h1>
+      <p>アプリで学んだ知識を、プリントで確認。<br>
+      <strong style="color:var(--accent-cyan);">📱 アプリで学習（インプット）→ 🖨️ プリントで書いてテスト（アウトプット）→ 📱 間違いを復習</strong></p>
+    </div>
+
+    <div style="max-width: 900px; margin: 0 auto;">
+
+      <!-- 学習サイクルフロー -->
+      <div style="display:flex; justify-content:center; gap:8px; align-items:center; margin-bottom:32px; flex-wrap:wrap;">
+        <div style="padding:10px 16px; border-radius:12px; background:rgba(96,165,250,0.1); border:1px solid rgba(96,165,250,0.25); text-align:center; font-size:13px;">
+          <div style="font-size:20px;">📱</div>
+          <div style="color:var(--accent-blue); font-weight:600;">STEP 1</div>
+          <div style="color:var(--text-secondary);">アプリで学習</div>
+        </div>
+        <span style="font-size:24px; color:var(--accent-cyan);">→</span>
+        <div style="padding:10px 16px; border-radius:12px; background:rgba(74,222,128,0.1); border:1px solid rgba(74,222,128,0.25); text-align:center; font-size:13px;">
+          <div style="font-size:20px;">🖨️</div>
+          <div style="color:var(--accent-green); font-weight:600;">STEP 2</div>
+          <div style="color:var(--text-secondary);">プリントでテスト</div>
+        </div>
+        <span style="font-size:24px; color:var(--accent-cyan);">→</span>
+        <div style="padding:10px 16px; border-radius:12px; background:rgba(251,146,60,0.1); border:1px solid rgba(251,146,60,0.25); text-align:center; font-size:13px;">
+          <div style="font-size:20px;">✅</div>
+          <div style="color:var(--accent-orange); font-weight:600;">STEP 3</div>
+          <div style="color:var(--text-secondary);">答え合わせ・復習</div>
+        </div>
+      </div>
+
+      <!-- ===== テスト① 炭化水素 構造式 ===== -->
+      <div style="margin-bottom:36px; padding:24px; border-radius:12px; background:var(--glass); border:1px solid var(--border);">
+        <h2 style="font-size:16px; margin-bottom:4px;">⛓️ テスト① 鎖状炭化水素（構造式）</h2>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:16px;">対応: Module 2「命名法」→ 接頭辞・語尾ルール・構造式</p>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
+          <span style="font-size:12px; color:var(--accent-blue); padding:4px 10px; border:1px solid rgba(96,165,250,0.25); border-radius:999px;">📝 問題用</span>
+        </div>
+        <div class="print-options">
+          <button class="print-btn alkane" onclick="printSheet('alkane','blank')"><span class="dot"></span> アルカン</button>
+          <button class="print-btn alkene" onclick="printSheet('alkene','blank')"><span class="dot"></span> アルケン</button>
+          <button class="print-btn alkyne" onclick="printSheet('alkyne','blank')"><span class="dot"></span> アルキン</button>
+        </div>
+        <button class="print-all-btn" onclick="printSheet('all','blank')" style="margin-bottom:16px;">🖨️ 問題用 3枚すべて</button>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
+          <span style="font-size:12px; color:var(--accent-green); padding:4px 10px; border:1px solid rgba(74,222,128,0.25); border-radius:999px;">✅ 解答用</span>
+        </div>
+        <div class="print-options">
+          <button class="print-btn alkane" onclick="printSheet('alkane','answer')"><span class="dot"></span> アルカン</button>
+          <button class="print-btn alkene" onclick="printSheet('alkene','answer')"><span class="dot"></span> アルケン</button>
+          <button class="print-btn alkyne" onclick="printSheet('alkyne','answer')"><span class="dot"></span> アルキン</button>
+        </div>
+        <button class="print-all-btn" onclick="printSheet('all','answer')">🖨️ 解答用 3枚すべて</button>
+      </div>
+
+      <!-- ===== テスト② 官能基 ===== -->
+      <div style="margin-bottom:36px; padding:24px; border-radius:12px; background:var(--glass); border:1px solid var(--border);">
+        <h2 style="font-size:16px; margin-bottom:4px;">🧪 テスト② 官能基</h2>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:16px;">対応: Module 3「官能基」→ 名称・構造式・接尾辞・性質</p>
+        <div class="print-options">
+          <button class="print-btn" style="border-color:rgba(251,146,60,0.3);" onclick="printSheet('fg','blank')"><span class="dot" style="background:#fb923c;"></span> 問題用</button>
+          <button class="print-btn" style="border-color:rgba(74,222,128,0.3);" onclick="printSheet('fg','answer')"><span class="dot" style="background:#4ade80;"></span> 解答用</button>
+        </div>
+      </div>
+
+      <!-- ===== テスト③ 芳香族 ===== -->
+      <div style="margin-bottom:36px; padding:24px; border-radius:12px; background:var(--glass); border:1px solid var(--border);">
+        <h2 style="font-size:16px; margin-bottom:4px;">💎 テスト③ 芳香族化合物</h2>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:16px;">対応: Module 2「芳香族」→ 化合物名・構造式・分子式・特徴</p>
+        <div class="print-options">
+          <button class="print-btn" style="border-color:rgba(244,114,182,0.3);" onclick="printSheet('aromatic','blank')"><span class="dot" style="background:#f472b6;"></span> 問題用</button>
+          <button class="print-btn" style="border-color:rgba(74,222,128,0.3);" onclick="printSheet('aromatic','answer')"><span class="dot" style="background:#4ade80;"></span> 解答用</button>
+        </div>
+      </div>
+    </div>
+
+    <a href="index.html" class="back-link">← アプリに戻って学習する</a>
+  </div>
+
+  <!-- ===== Print Sheets ===== -->
+  <!-- 炭化水素 -->
+  <div class="print-sheet print-blank" id="sheet-blank-alkane"></div>
+  <div class="print-sheet print-blank" id="sheet-blank-alkene"></div>
+  <div class="print-sheet print-blank" id="sheet-blank-alkyne"></div>
+  <div class="print-sheet print-answer" id="sheet-answer-alkane"></div>
+  <div class="print-sheet print-answer" id="sheet-answer-alkene"></div>
+  <div class="print-sheet print-answer" id="sheet-answer-alkyne"></div>
+  <!-- 官能基 -->
+  <div class="print-sheet print-fg" id="sheet-blank-fg"></div>
+  <div class="print-sheet print-fg" id="sheet-answer-fg"></div>
+  <!-- 芳香族 -->
+  <div class="print-sheet print-aromatic" id="sheet-blank-aromatic"></div>
+  <div class="print-sheet print-aromatic" id="sheet-answer-aromatic"></div>
+
+  <script>
+    // ===== Data =====
+    const prefixes = [
+      { c: 1,  pre: "meth" },
+      { c: 2,  pre: "eth" },
+      { c: 3,  pre: "prop" },
+      { c: 4,  pre: "but" },
+      { c: 5,  pre: "pent" },
+      { c: 6,  pre: "hex" },
+      { c: 7,  pre: "hept" },
+      { c: 8,  pre: "oct" },
+      { c: 9,  pre: "non" },
+      { c: 10, pre: "dec" },
+    ];
+
+    const jpNames = {
+      1: "メタン", 2: "エタン", 3: "プロパン", 4: "ブタン", 5: "ペンタン",
+      6: "ヘキサン", 7: "ヘプタン", 8: "オクタン", 9: "ノナン", 10: "デカン"
+    };
+
+    function sub(n) {
+      const s = { '0':'₀','1':'₁','2':'₂','3':'₃','4':'₄','5':'₅','6':'₆','7':'₇','8':'₈','9':'₉' };
+      return String(n).split('').map(c => s[c] || c).join('');
+    }
+
+    function getRows(type) {
+      const rows = [];
+      const startC = (type === 'alkane') ? 1 : 2;
+
+      for (let i = 0; i < prefixes.length; i++) {
+        const p = prefixes[i];
+        if (p.c < startC) continue;
+
+        let suffix, formulaH;
+        if (type === 'alkane') {
+          suffix = 'ane';
+          formulaH = 2 * p.c + 2;
+        } else if (type === 'alkene') {
+          suffix = 'ene';
+          formulaH = 2 * p.c;
+        } else {
+          suffix = 'yne';
+          formulaH = 2 * p.c - 2;
+        }
+
+        const enName = p.pre + suffix;
+        let jpName;
+        if (type === 'alkane') {
+          jpName = jpNames[p.c];
+        } else if (type === 'alkene') {
+          if (p.c === 2) jpName = 'エテン';
+          else if (p.c === 3) jpName = 'プロペン';
+          else if (p.c === 4) jpName = 'ブテン';
+          else if (p.c === 5) jpName = 'ペンテン';
+          else if (p.c === 6) jpName = 'ヘキセン';
+          else if (p.c === 7) jpName = 'ヘプテン';
+          else if (p.c === 8) jpName = 'オクテン';
+          else if (p.c === 9) jpName = 'ノネン';
+          else if (p.c === 10) jpName = 'デセン';
+        } else {
+          if (p.c === 2) jpName = 'エチン';
+          else if (p.c === 3) jpName = 'プロピン';
+          else if (p.c === 4) jpName = 'ブチン';
+          else if (p.c === 5) jpName = 'ペンチン';
+          else if (p.c === 6) jpName = 'ヘキシン';
+          else if (p.c === 7) jpName = 'ヘプチン';
+          else if (p.c === 8) jpName = 'オクチン';
+          else if (p.c === 9) jpName = 'ノニン';
+          else if (p.c === 10) jpName = 'デシン';
+        }
+
+        // Build structural formula
+        let structure = buildStructure(p.c, type);
+
+        rows.push({
+          c: p.c,
+          formula: `C${sub(p.c)}H${sub(formulaH)}`,
+          en: enName,
+          jp: jpName,
+          structure: structure,
+        });
+      }
+      return rows;
+    }
+
+    // Generate full structural formula with explicit C-H bonds
+    function buildStructure(c, type) {
+      // Special case: methane
+      if (c === 1 && type === 'alkane') {
+        return '  H\n  |\nH-C-H\n  |\n  H';
+      }
+
+      // Determine H configuration for each carbon
+      const configs = [];
+      for (let i = 0; i < c; i++) {
+        let hTop = false, hBot = false, hLeft = false, hRight = false;
+        const isFirst = (i === 0);
+        const isLast = (i === c - 1);
+
+        if (type === 'alkane') {
+          hTop = true; hBot = true;
+          if (isFirst) hLeft = true;
+          if (isLast) hRight = true;
+        } else if (type === 'alkene') {
+          // C1=C2 double bond
+          if (isFirst) {
+            // double bond(2) + H + H = 4
+            hTop = true; hBot = true;
+          } else if (i === 1) {
+            if (isLast) {
+              // ethene: double bond(2) + H + H = 4
+              hTop = true; hBot = true;
+            } else {
+              // double bond(2) + single bond(1) + H = 4
+              hTop = true; hBot = false;
+            }
+          } else {
+            // normal sp3 carbons
+            hTop = true; hBot = true;
+            if (isLast) hRight = true;
+          }
+        } else {
+          // alkyne: C1≡C2 triple bond
+          if (isFirst) {
+            // triple bond(3) + H = 4 → side H only
+            hLeft = true;
+          } else if (i === 1) {
+            if (isLast) {
+              // ethyne: triple bond(3) + H = 4
+              hRight = true;
+            }
+            // else: triple(3) + single(1) = 4, no H
+          } else {
+            hTop = true; hBot = true;
+            if (isLast) hRight = true;
+          }
+        }
+        configs.push({ hTop, hBot, hLeft, hRight });
+      }
+
+      // Build main chain string
+      const hasPrefix = configs[0].hLeft;
+      let mainParts = [];
+      if (hasPrefix) mainParts.push('H-');
+
+      for (let i = 0; i < c; i++) {
+        mainParts.push('C');
+        if (i < c - 1) {
+          if (type === 'alkene' && i === 0) mainParts.push('=');
+          else if (type === 'alkyne' && i === 0) mainParts.push('\u2261');
+          else mainParts.push('-');
+        }
+      }
+      if (configs[c - 1].hRight) mainParts.push('-H');
+      const mainRow = mainParts.join('');
+
+      // Compute position of each C in the string
+      const cPos = [];
+      let p = hasPrefix ? 2 : 0;
+      for (let i = 0; i < c; i++) {
+        cPos.push(p);
+        if (i < c - 1) p += 2;
+      }
+      const totalLen = mainRow.length;
+
+      // Build rows by scanning positions
+      function makeRow(check) {
+        let row = '';
+        for (let x = 0; x < totalLen; x++) {
+          const idx = cPos.indexOf(x);
+          row += (idx >= 0 && check(idx)) ? arguments[1] : ' ';
+        }
+        return row.replace(/\s+$/, '');
+      }
+
+      const topH   = makeRow(i => configs[i].hTop, 'H');
+      const topP   = makeRow(i => configs[i].hTop, '|');
+      const botP   = makeRow(i => configs[i].hBot, '|');
+      const botH   = makeRow(i => configs[i].hBot, 'H');
+
+      const hasTop = topH.trim().length > 0;
+      const hasBot = botH.trim().length > 0;
+
+      let lines = [];
+      if (hasTop) { lines.push(topH); lines.push(topP); }
+      lines.push(mainRow);
+      if (hasBot) { lines.push(botP); lines.push(botH); }
+
+      return lines.join('\n');
+    }
+
+    const typeInfo = {
+      alkane: {
+        title: '鎖状炭化水素 — アルカン（飽和炭化水素）演習プリント',
+        subtitle: '一般式: CₙH₂ₙ₊₂ ／ 語尾: -ane ／ 結合: すべて単結合(C-C)',
+        tip: '💡 アルカンはすべて単結合。構造式では C-C 間を1本線で結びます。水素は各Cの空いた手に埋めます。（Cの手は4本）',
+        color: '#4ade80'
+      },
+      alkene: {
+        title: '鎖状炭化水素 — アルケン（不飽和炭化水素）演習プリント',
+        subtitle: '一般式: CₙH₂ₙ ／ 語尾: -ene ／ 結合: 二重結合(C=C)を1つ含む',
+        tip: '💡 アルケンは二重結合(C=C)を1つ含みます。構造式では二重結合の位置を二本線(=)で示します。C2以上のみ存在。',
+        color: '#60a5fa'
+      },
+      alkyne: {
+        title: '鎖状炭化水素 — アルキン（不飽和炭化水素）演習プリント',
+        subtitle: '一般式: CₙH₂ₙ₋₂ ／ 語尾: -yne ／ 結合: 三重結合(C≡C)を1つ含む',
+        tip: '💡 アルキンは三重結合(C≡C)を1つ含みます。構造式では三重結合の位置を三本線(≡)で示します。C2以上のみ存在。',
+        color: '#c084fc'
+      }
+    };
+
+    // ===== Render sheets =====
+    function renderSheet(type, blank) {
+      const info = typeInfo[type];
+      const rows = getRows(type);
+      const totalRows = 10;
+      const emptyRows = totalRows - rows.length;
+      const label = blank ? '【問題】' : '【解答】';
+
+      let html = `
+        <div class="sheet-title">${info.title} ${label}</div>
+        <div class="sheet-subtitle">${info.subtitle}</div>
+        <div class="name-field">名前: <span>&nbsp;</span></div>
+        <table class="ws-table">
+          <thead>
+            <tr>
+              <th class="col-c">炭素数</th>
+              <th class="col-formula">組成式<br>(分子式)</th>
+              <th class="col-en">英語名<br>(IUPAC名)</th>
+              <th class="col-jp">カタカナ名</th>
+              <th class="col-structure">構造式</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      rows.forEach(r => {
+        html += `
+          <tr>
+            <td>C${r.c}</td>
+            <td style="font-family: 'JetBrains Mono', monospace;">${blank ? '' : r.formula}</td>
+            <td style="font-family: 'JetBrains Mono', monospace; font-size: 8.5pt;">${blank ? '' : r.en}</td>
+            <td>${blank ? '' : r.jp}</td>
+            <td class="structure-cell">${blank ? '' : '<pre>' + r.structure + '</pre>'}</td>
+          </tr>
+        `;
+      });
+
+      // Fill remaining rows to pad to 10
+      for (let i = 0; i < emptyRows; i++) {
+        html += `
+          <tr>
+            <td></td><td></td><td></td><td></td><td class="structure-cell"></td>
+          </tr>
+        `;
+      }
+
+      html += `
+          </tbody>
+        </table>
+        <div class="sheet-tip">${info.tip}</div>
+        <div class="sheet-footer">有機化学 入門ナビ — 演習プリント ${label}</div>
+      `;
+
+      const prefix = blank ? 'blank' : 'answer';
+      document.getElementById(`sheet-${prefix}-${type}`).innerHTML = html;
+    }
+
+    // ===== 官能基テスト =====
+    const fgData = [
+      { name: 'ヒドロキシ基', en: 'Hydroxyl', structure: '-OH', suffix: '-ol', compound: 'エタノール (ethanol)', property: '水素結合 / 中性' },
+      { name: 'カルボキシ基', en: 'Carboxyl', structure: '-COOH', suffix: '-oic acid', compound: '酢酸 (acetic acid)', property: '弱酸性' },
+      { name: 'アルデヒド基', en: 'Aldehyde', structure: '-CHO', suffix: '-al', compound: 'ホルムアルデヒド (methanal)', property: '還元性あり' },
+      { name: 'カルボニル基(ケトン)', en: 'Ketone', structure: '>C=O', suffix: '-one', compound: 'アセトン (propanone)', property: '溶媒として重要' },
+      { name: 'アミノ基', en: 'Amino', structure: '-NH₂', suffix: '-amine', compound: 'メチルアミン (methylamine)', property: '弱塩基性' },
+      { name: 'エーテル結合', en: 'Ether', structure: '-O-', suffix: 'ether', compound: 'ジエチルエーテル', property: '溶媒 / 安定' },
+      { name: 'エステル結合', en: 'Ester', structure: '-COO-', suffix: '-oate', compound: '酢酸エチル', property: '芳香(果実臭)' },
+      { name: 'ニトロ基', en: 'Nitro', structure: '-NO₂', suffix: 'nitro-', compound: 'ニトロベンゼン', property: '爆薬原料' },
+      { name: 'スルホ基', en: 'Sulfo', structure: '-SO₃H', suffix: '-sulfonic acid', compound: 'ベンゼンスルホン酸', property: '強酸性' },
+      { name: 'アミド結合', en: 'Amide', structure: '-CONH₂', suffix: '-amide', compound: 'アセトアミド', property: 'ペプチド結合の基礎' }
+    ];
+
+    function renderFGSheet(blank) {
+      const label = blank ? '【問題】' : '【解答】';
+      let html = `
+        <div class="sheet-title">官能基テスト ${label}</div>
+        <div class="sheet-subtitle">官能基の名称・構造式・接尾辞・代表化合物・性質を確認</div>
+        <div class="name-field">名前: <span>&nbsp;</span></div>
+        <table class="ws-table">
+          <thead>
+            <tr>
+              <th style="width:5%;">No.</th>
+              <th style="width:16%;">官能基名</th>
+              <th style="width:14%;">英語名</th>
+              <th style="width:12%;">構造式</th>
+              <th style="width:12%;">接尾辞/接頭辞</th>
+              <th style="width:22%;">代表化合物</th>
+              <th style="width:19%;">性質・特徴</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      fgData.forEach((fg, i) => {
+        html += `
+          <tr>
+            <td>${i + 1}</td>
+            <td style="font-size:8pt;">${blank ? '' : fg.name}</td>
+            <td style="font-family:'JetBrains Mono',monospace; font-size:7.5pt;">${blank ? '' : fg.en}</td>
+            <td style="font-family:'JetBrains Mono',monospace; font-size:9pt; font-weight:600;">${blank ? '' : fg.structure}</td>
+            <td style="font-family:'JetBrains Mono',monospace; font-size:8pt;">${blank ? '' : fg.suffix}</td>
+            <td style="font-size:7.5pt;">${blank ? '' : fg.compound}</td>
+            <td style="font-size:7.5pt;">${blank ? '' : fg.property}</td>
+          </tr>
+        `;
+      });
+      html += `
+          </tbody>
+        </table>
+        <div class="sheet-tip">💡 官能基は有機化合物の「性格」を決定する部分構造。構造式と接尾辞のセットで覚える。</div>
+        <div class="sheet-footer">有機化学 入門ナビ — 官能基テスト ${label}</div>
+      `;
+      const prefix = blank ? 'blank' : 'answer';
+      document.getElementById(`sheet-${prefix}-fg`).innerHTML = html;
+    }
+
+    // ===== 芳香族テスト =====
+    const aromaticData = [
+      { name: 'benzene', jp: 'ベンゼン', formula: 'C₆H₆', feature: '最も基本的な芳香族。6Cの正六角形', iupac: '—' },
+      { name: 'toluene', jp: 'トルエン', formula: 'C₇H₈', feature: 'ベンゼン + メチル基。溶媒', iupac: 'methylbenzene' },
+      { name: 'xylene', jp: 'キシレン', formula: 'C₈H₁₀', feature: 'ベンゼン + メチル基×2。o/m/p異性体', iupac: 'dimethylbenzene' },
+      { name: 'styrene', jp: 'スチレン', formula: 'C₈H₈', feature: 'ベンゼン + ビニル基。ポリスチレン原料', iupac: 'ethenylbenzene' },
+      { name: 'naphthalene', jp: 'ナフタレン', formula: 'C₁₀H₈', feature: '縮合二環式。防虫剤', iupac: '—' },
+      { name: 'phenol', jp: 'フェノール', formula: 'C₆H₅OH', feature: 'ベンゼン + OH。弱酸性', iupac: '—' },
+      { name: 'aniline', jp: 'アニリン', formula: 'C₆H₅NH₂', feature: 'ベンゼン + NH₂。アゾ染料原料', iupac: 'phenylamine' }
+    ];
+
+    function renderAromaticSheet(blank) {
+      const label = blank ? '【問題】' : '【解答】';
+      let html = `
+        <div class="sheet-title">芳香族化合物テスト ${label}</div>
+        <div class="sheet-subtitle">代表的な芳香族化合物の名称・分子式・IUPAC名・特徴を確認</div>
+        <div class="name-field">名前: <span>&nbsp;</span></div>
+        <table class="ws-table">
+          <thead>
+            <tr>
+              <th style="width:5%;">No.</th>
+              <th style="width:15%;">慣用名</th>
+              <th style="width:13%;">カタカナ名</th>
+              <th style="width:12%;">分子式</th>
+              <th style="width:18%;">IUPAC名</th>
+              <th style="width:20%;">構造式(描画)</th>
+              <th style="width:17%;">特徴</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      aromaticData.forEach((c, i) => {
+        html += `
+          <tr>
+            <td>${i + 1}</td>
+            <td style="font-family:'JetBrains Mono',monospace; font-size:8pt;">${blank ? '' : c.name}</td>
+            <td style="font-size:8.5pt;">${blank ? '' : c.jp}</td>
+            <td style="font-family:'JetBrains Mono',monospace; font-size:9pt;">${blank ? '' : c.formula}</td>
+            <td style="font-family:'JetBrains Mono',monospace; font-size:7.5pt;">${blank ? '' : c.iupac}</td>
+            <td class="structure-cell"></td>
+            <td style="font-size:7pt;">${blank ? '' : c.feature}</td>
+          </tr>
+        `;
+      });
+      html += `
+          </tbody>
+        </table>
+        <div class="sheet-tip">💡 芳香族化合物はベンゼン環を含む化合物。慣用名が多いが、IUPAC名も確認しておこう。二置換ベンゼンはo-(1,2)/m-(1,3)/p-(1,4)で位置を表す。</div>
+        <div class="sheet-footer">有機化学 入門ナビ — 芳香族テスト ${label}</div>
+      `;
+      const prefix = blank ? 'blank' : 'answer';
+      document.getElementById(`sheet-${prefix}-aromatic`).innerHTML = html;
+    }
+
+    // ===== Print control =====
+    function printSheet(which, mode) {
+      const prefix = (mode === 'blank') ? 'blank' : 'answer';
+
+      document.querySelectorAll('.print-sheet').forEach(el => {
+        el.classList.add('print-hidden');
+      });
+
+      if (which === 'all') {
+        // 炭化水素3枚のみ(blank/answer)
+        document.querySelectorAll(`.print-${prefix}`).forEach(el => {
+          el.classList.remove('print-hidden');
+        });
+      } else if (which === 'fg' || which === 'aromatic') {
+        const target = document.getElementById(`sheet-${prefix}-${which}`);
+        if (target) target.classList.remove('print-hidden');
+      } else {
+        const target = document.getElementById(`sheet-${prefix}-${which}`);
+        if (target) target.classList.remove('print-hidden');
+      }
+      
+      window.print();
+    }
+
+    // Initialize all sheets
+    ['alkane', 'alkene', 'alkyne'].forEach(type => {
+      renderSheet(type, true);
+      renderSheet(type, false);
+    });
+    renderFGSheet(true);
+    renderFGSheet(false);
+    renderAromaticSheet(true);
+    renderAromaticSheet(false);
+  </script>
+</body>
+</html>

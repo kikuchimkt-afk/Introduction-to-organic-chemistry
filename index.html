@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="高校生のための有機化学予習アプリ。炭化水素の命名法(C10まで)と官能基を体系的に学べるインタラクティブ学習ツール。">
+  <title>有機化学 入門ナビ — 命名法と官能基の体系的マスター</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Theme Toggle -->
+  <button class="theme-toggle" onclick="toggleTheme()" title="テーマ切り替え" id="themeToggle">🌙</button>
+
+  <!-- ===== Header ===== -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="app-title">
+        <span class="icon">⬡</span>
+        <div>
+          <h1>有機化学 入門ナビ</h1>
+          <span class="subtitle">命名法と官能基の体系的マスター</span>
+        </div>
+      </div>
+      <div class="progress-badge" id="progressBadge">
+        <span>📊</span>
+        <span id="progressText">学習を始めましょう</span>
+      </div>
+    </div>
+    <nav class="nav-tabs" role="tablist">
+      <button class="nav-tab active" data-module="module1" role="tab" aria-selected="true">
+        <span class="tab-num">1</span>
+        <span class="tab-icon">🔤</span>
+        接頭辞
+      </button>
+      <button class="nav-tab" data-module="module2" role="tab" aria-selected="false">
+        <span class="tab-num">2</span>
+        <span class="tab-icon">⛓️</span>
+        命名法
+      </button>
+      <button class="nav-tab" data-module="module3" role="tab" aria-selected="false">
+        <span class="tab-num">3</span>
+        <span class="tab-icon">⚗️</span>
+        官能基
+      </button>
+      <button class="nav-tab" data-module="module4" role="tab" aria-selected="false">
+        <span class="tab-num">4</span>
+        <span class="tab-icon">✅</span>
+        確認テスト
+      </button>
+    </nav>
+  </header>
+
+  <!-- ===== Main Content ===== -->
+  <main class="main-content">
+
+    <!-- ========== Module 1: 接頭辞 ========== -->
+    <section class="module active" id="module1">
+      <div class="section-header">
+        <h2>🔤 接頭辞テーブル — 炭素数の「名前」を覚える</h2>
+        <p class="section-desc">
+          有機化学の命名法は<strong>接頭辞（炭素数）+ 語尾（結合の種類）</strong>の組み合わせルール。
+          まずは C1〜C10 の接頭辞を、語源とセットで覚えましょう。
+          <br><em>💡 C1〜C4 は歴史的な名前（慣用名由来）、C5以降はギリシャ数詞で規則的です。</em>
+        </p>
+      </div>
+
+      <!-- Prefix Table -->
+      <div class="glass-card prefix-table-container">
+        <table class="prefix-table" id="prefixTable">
+          <thead>
+            <tr>
+              <th>炭素数</th>
+              <th>接頭辞</th>
+              <th>日本語名 (アルカン)</th>
+              <th>語源 / 覚え方</th>
+            </tr>
+          </thead>
+          <tbody id="prefixTableBody">
+            <!-- data.js から動的生成 -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Flashcard Practice -->
+      <div class="flashcard-area glass-card">
+        <h3 style="font-size:16px; margin-bottom: 4px;">🃏 フラッシュカード練習</h3>
+        <p style="font-size:13px; color: var(--text-secondary); margin-bottom: 16px;">カードをタップして答えを確認。接頭辞 ↔ 炭素数を瞬時に答えられるように練習しましょう。</p>
+
+        <div class="flashcard-controls">
+          <button class="btn btn-sm" id="fcModePrefix" onclick="setFlashcardMode('prefix')">接頭辞 → 炭素数</button>
+          <button class="btn btn-sm" id="fcModeCarbon" onclick="setFlashcardMode('carbon')">炭素数 → 接頭辞</button>
+        </div>
+
+        <div class="flashcard-container" id="flashcardContainer" onclick="flipFlashcard()">
+          <div class="flashcard" id="flashcard">
+            <div class="flashcard-face flashcard-front">
+              <span class="card-label" id="fcFrontLabel">接頭辞</span>
+              <span class="card-value" id="fcFrontValue">meth-</span>
+            </div>
+            <div class="flashcard-face flashcard-back">
+              <span class="card-answer" id="fcBackValue">C1</span>
+              <span class="card-detail" id="fcBackDetail">メタン — ギリシャ語 methy (酒) + hyle (木)</span>
+            </div>
+          </div>
+        </div>
+        <p class="flashcard-hint">👆 カードをタップして裏面を確認</p>
+
+        <div class="flashcard-nav">
+          <button class="btn btn-icon" onclick="prevFlashcard()">◀</button>
+          <span class="counter" id="fcCounter">1 / 10</span>
+          <button class="btn btn-icon" onclick="nextFlashcard()">▶</button>
+          <button class="btn btn-sm" onclick="shuffleFlashcards()" style="margin-left: 12px;">🔀 シャッフル</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== Module 2: 命名法 ========== -->
+    <section class="module" id="module2">
+      <div class="section-header">
+        <h2>⛓️ 炭化水素の命名法 — ルールで理解する</h2>
+        <p class="section-desc">
+          炭化水素の名前は<strong>「接頭辞(炭素数) + 語尾(結合の種類)」</strong>の組み合わせ。
+          語尾は3つしかありません。ルールを理解すれば30個の名前が即座に作れます。
+        </p>
+      </div>
+
+      <!-- Hydrocarbon Classification -->
+      <div class="hc-classification-section">
+        <h3 style="font-size:18px; margin-bottom: 8px;">🗂️ 炭化水素の分類体系</h3>
+        <p style="font-size:13px; color: var(--text-secondary); margin-bottom: 16px;" id="hcClassIntro">
+          <!-- data.jsから動的挿入 -->
+        </p>
+        <div class="glass-card" id="hcClassPrinciple" style="margin-bottom: 20px;">
+          <!-- 合成化学者の視点 -->
+        </div>
+
+        <!-- 分類軸の解説 -->
+        <div id="hcClassAxes" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+          <!-- data.jsから動的生成 -->
+        </div>
+
+        <!-- 分類マトリクス (2×2 テーブル) -->
+        <div class="glass-card" style="margin-bottom: 24px;">
+          <h4 style="font-size:15px; margin-bottom: 12px;">📊 分類マトリクス — 骨格 × 結合</h4>
+          <table class="prefix-table" id="hcMatrix">
+            <thead>
+              <tr>
+                <th></th>
+                <th>飽和 (単結合のみ)</th>
+                <th>不飽和 (多重結合あり)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:700; color: var(--text-primary);">鎖状</td>
+                <td id="matrixChainSat"><!-- 動的 --></td>
+                <td id="matrixChainUnsat"><!-- 動的 --></td>
+              </tr>
+              <tr>
+                <td style="font-weight:700; color: var(--text-primary);">環状</td>
+                <td id="matrixCycleSat"><!-- 動的 --></td>
+                <td id="matrixCycleUnsat"><!-- 動的 --></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 各カテゴリ詳細カード -->
+        <h4 style="font-size:15px; margin-bottom: 12px;">📋 各カテゴリの詳細</h4>
+        <div id="hcCategoryCards">
+          <!-- data.jsから動的生成 -->
+        </div>
+
+        <!-- 不飽和度(DBE) -->
+        <div class="glass-card" style="margin-top: 20px;" id="dbeSection">
+          <!-- data.jsから動的生成 -->
+        </div>
+      </div>
+
+      <!-- Aromatic Hydrocarbons -->
+      <div class="aromatic-section" style="margin-top: 32px;">
+        <h3 style="font-size:18px; margin-bottom: 8px;">💎 芳香族炭化水素</h3>
+        <p style="font-size:13px; color: var(--text-secondary); margin-bottom: 16px;" id="aromaticIntro">
+          <!-- data.jsから動的挿入 -->
+        </p>
+        <div class="glass-card" id="aromaticPrinciple" style="margin-bottom: 20px;">
+          <!-- 合成化学者の視点 -->
+        </div>
+
+        <!-- ベンゼン環の特徴 -->
+        <div class="glass-card" style="margin-bottom: 20px; border-left: 3px solid #f472b6;" id="benzeneFeatures">
+          <!-- data.jsから動的生成 -->
+        </div>
+
+        <!-- 命名法ルール -->
+        <div class="glass-card" style="margin-bottom: 20px;" id="aromaticNaming">
+          <!-- data.jsから動的生成 -->
+        </div>
+
+        <!-- オルト・メタ・パラ -->
+        <div class="glass-card" style="margin-bottom: 20px;" id="orthoMetaPara">
+          <!-- data.jsから動的生成 -->
+        </div>
+
+        <!-- 代表化合物カード -->
+        <h4 style="font-size:15px; margin-bottom: 12px;">📋 代表的な芳香族化合物</h4>
+        <div id="aromaticCompounds">
+          <!-- data.jsから動的生成 -->
+        </div>
+      </div>
+
+      <!-- Suffix Cards -->
+      <div style="margin-top: 32px;">
+        <h3 style="font-size:18px; margin-bottom: 12px;">🔤 語尾ルール — 結合の種類を表す3つの語尾</h3>
+      </div>
+      <div class="suffix-grid" id="suffixGrid">
+        <!-- data.js から動的生成 -->
+      </div>
+
+      <!-- Naming Rules -->
+      <div class="naming-rules glass-card">
+        <h3 style="font-size:16px; margin-bottom: 16px;">📋 IUPAC命名法の手順</h3>
+        <div class="rule-steps" id="ruleSteps">
+          <!-- data.js から動的生成 -->
+        </div>
+      </div>
+
+      <!-- Branched Chain Nomenclature -->
+      <div class="branched-naming-section" style="margin-top: 32px;">
+        <h3 style="font-size:18px; margin-bottom: 8px;">🌿 分岐鎖（枝分かれ）の命名法</h3>
+        <p style="font-size:13px; color: var(--text-secondary); margin-bottom: 16px;" id="branchedIntro">
+          <!-- data.jsから動的挿入 -->
+        </p>
+
+        <!-- 置換基テーブル -->
+        <div class="glass-card" style="margin-bottom: 20px;">
+          <h4 style="font-size:15px; margin-bottom: 8px;">🔧 置換基（アルキル基）の命名ルール</h4>
+          <p style="font-size:13px; color: var(--text-secondary); margin-bottom: 12px;" id="substituentRule">
+            <!-- data.jsから動的挿入 -->
+          </p>
+          <div class="substituent-conversion" style="text-align: center; margin-bottom: 16px;">
+            <span style="font-size: 14px; color: var(--text-secondary);">アルカンの語尾</span>
+            <span style="font-family: var(--font-mono); font-weight: 700; font-size: 18px; color: var(--accent-green); margin: 0 8px;">-ane</span>
+            <span style="font-size: 20px; color: var(--accent-cyan);">→</span>
+            <span style="font-family: var(--font-mono); font-weight: 700; font-size: 18px; color: var(--accent-orange); margin: 0 8px;">-yl</span>
+            <span style="font-size: 14px; color: var(--text-secondary);">= 置換基名</span>
+          </div>
+          <table class="prefix-table" id="substituentTable">
+            <thead>
+              <tr>
+                <th>アルカン名</th>
+                <th>置換基名</th>
+                <th>構造式</th>
+                <th>由来</th>
+              </tr>
+            </thead>
+            <tbody id="substituentTableBody">
+              <!-- data.jsから動的生成 -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 分岐鎖の命名手順 -->
+        <div class="glass-card" style="margin-bottom: 20px;">
+          <h4 style="font-size:15px; margin-bottom: 16px;">📋 分岐鎖の命名手順（詳細）</h4>
+          <div class="rule-steps" id="branchedSteps">
+            <!-- data.jsから動的生成 -->
+          </div>
+        </div>
+
+        <!-- 具体的な命名例 -->
+        <h4 style="font-size:15px; margin-bottom: 12px;">📝 具体的な命名例</h4>
+        <div id="branchedExamples">
+          <!-- data.jsから動的生成 -->
+        </div>
+      </div>
+
+      <!-- Functional Group Nomenclature -->
+      <div class="fg-naming-section" style="margin-top: 32px;">
+        <h3 style="font-size:18px; margin-bottom: 8px;">🏷️ 官能基を含む化合物の命名法</h3>
+        <p style="font-size:13px; color: var(--text-secondary); margin-bottom: 16px;" id="fgNamingIntro">
+          <!-- data.jsから動的挿入 -->
+        </p>
+        <div class="fg-naming-principle glass-card" id="fgNamingPrinciple" style="margin-bottom: 20px;">
+          <!-- 合成化学者の視点 -->
+        </div>
+
+        <!-- 命名タイプの説明 -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+          <div class="glass-card" style="border-left: 3px solid var(--accent-blue);">
+            <h4 style="font-size:14px; color: var(--accent-blue); margin-bottom: 6px;">📝 接尾辞型（語尾を変える）</h4>
+            <p style="font-size:12px; color: var(--text-secondary);">-OH, -CHO, >C=O, -COOH, -NH₂ など多くの官能基は語尾で名前に反映。</p>
+            <p style="font-size:12px; color: var(--text-muted); margin-top:4px;">例: methane → methan<strong style="color:var(--accent-blue);">ol</strong></p>
+          </div>
+          <div class="glass-card" style="border-left: 3px solid var(--accent-orange);">
+            <h4 style="font-size:14px; color: var(--accent-orange); margin-bottom: 6px;">📝 接頭辞型（前に付ける）</h4>
+            <p style="font-size:12px; color: var(--text-secondary);">ハロゲン(-Cl, -Brなど), ニトロ基(-NO₂)は名前の前に接頭辞で付加。</p>
+            <p style="font-size:12px; color: var(--text-muted); margin-top:4px;">例: <strong style="color:var(--accent-orange);">chloro</strong>methane</p>
+          </div>
+        </div>
+
+        <!-- Suffix Type Details -->
+        <h4 style="font-size:15px; margin-bottom: 12px;">接尾辞型 — 官能基ごとの語尾と命名例</h4>
+        <div id="fgNamingSuffixCards">
+          <!-- data.jsから動的生成 -->
+        </div>
+
+        <!-- Prefix Type Details -->
+        <h4 style="font-size:15px; margin: 24px 0 12px;">接頭辞型 — 前に付ける官能基</h4>
+        <div id="fgNamingPrefixCards">
+          <!-- data.jsから動的生成 -->
+        </div>
+
+        <!-- Priority Table -->
+        <div class="glass-card" style="margin-top: 24px;">
+          <h4 style="font-size:15px; margin-bottom: 12px;">🏆 官能基の優先順位（複数の官能基がある場合）</h4>
+          <p style="font-size:12px; color: var(--text-secondary); margin-bottom: 12px;">
+            複数の官能基を含む化合物では、最も優先順位の高い官能基が語尾（主特性基）となり、他の官能基は接頭辞として表します。
+          </p>
+          <table class="prefix-table" id="priorityTable">
+            <thead>
+              <tr>
+                <th>優先順位</th>
+                <th>官能基</th>
+                <th>接尾辞</th>
+                <th>備考</th>
+              </tr>
+            </thead>
+            <tbody id="priorityTableBody">
+              <!-- data.jsから動的生成 -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Hydrocarbon List -->
+      <div style="margin-top: 32px;">
+        <h3 style="font-size:16px; margin-bottom: 12px;">📊 炭化水素一覧 (C1〜C10)</h3>
+        <p style="font-size:13px; color: var(--text-secondary); margin-bottom: 16px;">
+          接頭辞と語尾の組み合わせで作られる全炭化水素。タイプで絞り込みできます。
+        </p>
+
+        <div class="type-filter" id="typeFilter">
+          <button class="type-filter-btn active" data-type="all" onclick="filterHydrocarbons('all')">すべて</button>
+          <button class="type-filter-btn" data-type="alkane" onclick="filterHydrocarbons('alkane')">🟢 アルカン</button>
+          <button class="type-filter-btn" data-type="alkene" onclick="filterHydrocarbons('alkene')">🔵 アルケン</button>
+          <button class="type-filter-btn" data-type="alkyne" onclick="filterHydrocarbons('alkyne')">🟣 アルキン</button>
+        </div>
+
+        <div class="naming-quiz-grid" id="hydrocarbonGrid">
+          <!-- data.js から動的生成 -->
+        </div>
+      </div>
+
+      <!-- Learning Cycle: Print Test -->
+      <div class="glass-card" style="margin-top: 32px; text-align: center; padding: 24px; border: 1px solid rgba(34,211,238,0.2);">
+        <h3 style="font-size: 16px; margin-bottom: 8px;">🔄 学習サイクル — インプット → アウトプット</h3>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">
+          ここまで学んだ知識を、プリントテストで確認しましょう。<br>
+          <strong>炭化水素の構造式・官能基・芳香族化合物</strong>の3種類のテストが用意されています。
+        </p>
+        <a href="print.html" class="btn btn-primary" style="text-decoration: none; display: inline-flex; gap: 6px;">🖨️ プリントテストを開く（問題用 / 解答用）</a>
+      </div>
+
+      <!-- Reaction Pathway -->
+      <div style="margin-top: 32px;">
+        <h3 style="font-size:18px; margin-bottom: 8px;">🔄 有機反応の系統図 — 酸化段階と変換経路</h3>
+        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;" id="pathwayIntro"></p>
+        <div class="glass-card" id="reactionPathway"></div>
+      </div>
+
+      <!-- Isomers -->
+      <div style="margin-top: 32px;">
+        <h3 style="font-size:18px; margin-bottom: 8px;">🔀 異性体 — 同じ分子式、異なる構造</h3>
+        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;" id="isomerIntro"></p>
+        <div id="isomerCards"></div>
+      </div>
+    </section>
+
+    <!-- ========== Module 3: 官能基 ========== -->
+    <section class="module" id="module3">
+      <div class="section-header">
+        <h2>⚗️ 官能基の体系的整理 — 構造から反応を理解する</h2>
+        <p class="section-desc">
+          官能基は<strong>「構造 → 電子的性質 → 反応性」</strong>の因果関係で理解するのが王道。
+          カテゴリごとに整理し、官能基同士のつながり（変換反応）も把握しましょう。
+          <br><em>💡 カードをクリックすると詳細が展開されます。</em>
+        </p>
+      </div>
+
+      <!-- Oxidation Level Diagram -->
+      <div class="oxidation-diagram">
+        <h3 style="font-size:15px; margin-bottom: 16px; text-align: center;">📈 酸化段階の階段 — アルコール→アルデヒド→カルボン酸</h3>
+        <p style="font-size:12px; color: var(--text-secondary); text-align: center; margin-bottom: 16px;">
+          含酸素官能基の関係は「酸化段階」で整理するのが最も効率的です。
+        </p>
+        <div class="oxidation-flow">
+          <div class="oxidation-node">
+            <div class="node-name">アルコール</div>
+            <div class="node-fg">R-OH</div>
+          </div>
+          <div class="oxidation-arrow">
+            <span class="arrow-label">酸化 [O]</span>
+            <span class="arrow-symbol">→</span>
+            <span class="arrow-label">還元 [H] ←</span>
+          </div>
+          <div class="oxidation-node">
+            <div class="node-name">アルデヒド</div>
+            <div class="node-fg">R-CHO</div>
+          </div>
+          <div class="oxidation-arrow">
+            <span class="arrow-label">酸化 [O]</span>
+            <span class="arrow-symbol">→</span>
+            <span class="arrow-label">還元 [H] ←</span>
+          </div>
+          <div class="oxidation-node">
+            <div class="node-name">カルボン酸</div>
+            <div class="node-fg">R-COOH</div>
+          </div>
+        </div>
+        <p style="font-size:12px; color: var(--accent-cyan); text-align: center; margin-top: 12px;">
+          🧪 2級アルコール(R₂CHOH) → ケトン(R₂C=O) という別ルートもあります
+        </p>
+      </div>
+
+      <!-- Functional Group Cards by Category -->
+      <div id="fgContainer">
+        <!-- data.js から動的生成 -->
+      </div>
+
+      <!-- Transformation Map -->
+      <div class="transformation-section">
+        <h3 style="font-size:16px; margin-bottom: 8px;">🔄 官能基変換ロードマップ</h3>
+        <p style="font-size:13px; color: var(--text-secondary); margin-bottom: 16px;">
+          有機合成化学では、官能基同士を変換して目的の分子を作ります。
+          各変換反応と試薬を把握しましょう。
+        </p>
+        <div class="transformation-grid" id="transformGrid">
+          <!-- data.js から動的生成 -->
+        </div>
+      </div>
+
+      <!-- Reaction Mechanisms -->
+      <div style="margin-top: 32px;">
+        <h3 style="font-size:18px; margin-bottom: 12px;">⚙️ 重要な有機反応 — エステル化・重合</h3>
+        <div id="reactionMechanisms"></div>
+      </div>
+    </section>
+
+    <!-- ========== Module 4: 確認テスト ========== -->
+    <section class="module" id="module4">
+      <div class="section-header">
+        <h2>✅ 確認テスト — 知識の定着チェック</h2>
+        <p class="section-desc">
+          学んだ知識をクイズ・穴埋め・逆引き・フラッシュカードで反復練習。
+        </p>
+      </div>
+
+      <!-- 学習進捗ダッシュボード -->
+      <div class="glass-card" style="margin-bottom: 24px; border: 1px solid rgba(34,211,238,0.2);" id="progressDashboard">
+        <h3 style="font-size:16px; margin-bottom: 12px;">📊 学習進捗</h3>
+        <div id="progressStats" style="font-size:13px; color:var(--text-secondary);">まだクイズを受けていません。下のクイズで学習を始めましょう！</div>
+      </div>
+
+      <!-- 官能基フラッシュカード -->
+      <div class="glass-card" style="margin-bottom: 24px;">
+        <h3 style="font-size:16px; margin-bottom: 8px;">🃏 官能基・芳香族フラッシュカード</h3>
+        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">構造式 ↔ 名前・接尾辞を瞬時に答える練習</p>
+        <div class="flashcard-container" id="fgFlashcardContainer" onclick="flipFGFlashcard()">
+          <div class="flashcard" id="fgFlashcard">
+            <div class="flashcard-face flashcard-front">
+              <span class="card-label">構造式</span>
+              <span class="card-value" id="fgFcFront" style="font-family:var(--font-mono);">-OH</span>
+            </div>
+            <div class="flashcard-face flashcard-back">
+              <span class="card-label">名前・接尾辞</span>
+              <span class="card-value" id="fgFcBack">ヒドロキシ基 / アルコール (-ol)</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:center; gap:12px; margin-top:12px;">
+          <button class="btn btn-sm" onclick="prevFGFlashcard()">◀ 前</button>
+          <span style="font-size:13px; color:var(--text-muted);" id="fgFcCounter">1 / 14</span>
+          <button class="btn btn-sm" onclick="nextFGFlashcard()">次 ▶</button>
+          <button class="btn btn-sm" onclick="shuffleFGFlashcards()">🔀</button>
+        </div>
+      </div>
+
+      <div class="quiz-container">
+        <!-- Category Filter -->
+        <div class="quiz-category-filter" id="quizCategoryFilter">
+          <button class="quiz-cat-btn active" data-cat="all" onclick="setQuizCategory('all')">すべて</button>
+          <button class="quiz-cat-btn" data-cat="prefix" onclick="setQuizCategory('prefix')">接頭辞</button>
+          <button class="quiz-cat-btn" data-cat="suffix" onclick="setQuizCategory('suffix')">語尾</button>
+          <button class="quiz-cat-btn" data-cat="formula" onclick="setQuizCategory('formula')">分子式</button>
+          <button class="quiz-cat-btn" data-cat="branched" onclick="setQuizCategory('branched')">分岐鎖</button>
+          <button class="quiz-cat-btn" data-cat="fg_naming" onclick="setQuizCategory('fg_naming')">命名法</button>
+          <button class="quiz-cat-btn" data-cat="aromatic" onclick="setQuizCategory('aromatic')">芳香族</button>
+          <button class="quiz-cat-btn" data-cat="functional_group" onclick="setQuizCategory('functional_group')">官能基</button>
+          <button class="quiz-cat-btn" data-cat="reaction" onclick="setQuizCategory('reaction')">反応</button>
+        </div>
+
+        <!-- Quiz Progress -->
+        <div class="quiz-progress">
+          <div class="quiz-progress-bar">
+            <div class="quiz-progress-fill" id="quizProgressFill" style="width: 0%"></div>
+          </div>
+          <span class="quiz-progress-text" id="quizProgressText">0 / 10</span>
+        </div>
+
+        <!-- Question Card -->
+        <div id="quizArea">
+          <div class="quiz-question-card">
+            <div class="q-category" id="quizCatLabel">接頭辞</div>
+            <div class="q-text" id="quizQuestionText">問題を読み込んでいます...</div>
+          </div>
+
+          <div class="quiz-options" id="quizOptions">
+            <!-- 動的生成 -->
+          </div>
+
+          <div class="quiz-explanation" id="quizExplanation">
+            <span class="exp-label">💡 解説</span>
+            <span id="quizExplanationText"></span>
+          </div>
+
+          <div style="text-align: center;">
+            <button class="btn btn-primary" id="quizNextBtn" onclick="nextQuizQuestion()" style="display: none;">
+              次の問題 →
+            </button>
+          </div>
+        </div>
+
+        <!-- Result Card -->
+        <div class="quiz-result" id="quizResult" style="display: none;">
+          <div class="result-score" id="quizScoreDisplay">0%</div>
+          <div class="result-text" id="quizResultText"></div>
+          <div class="result-breakdown">
+            <div class="result-stat">
+              <div class="stat-num" id="quizCorrectCount" style="color: var(--accent-green);">0</div>
+              <div class="stat-label">正解</div>
+            </div>
+            <div class="result-stat">
+              <div class="stat-num" id="quizWrongCount" style="color: var(--accent-red);">0</div>
+              <div class="stat-label">不正解</div>
+            </div>
+            <div class="result-stat">
+              <div class="stat-num" id="quizTotalCount">0</div>
+              <div class="stat-label">出題数</div>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="startQuiz()">🔄 もう一度チャレンジ</button>
+        </div>
+      </div>
+
+      <!-- 穴埋めテスト -->
+      <div class="glass-card" style="margin-top: 24px;">
+        <h3 style="font-size:16px; margin-bottom: 8px;">📝 穴埋めテスト</h3>
+        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">答えを入力して即時チェック。印刷不要のアウトプット練習。</p>
+        <div id="fillInTest"></div>
+        <button class="btn btn-primary" style="margin-top:12px;" onclick="checkFillIn()">✅ 答え合わせ</button>
+        <button class="btn btn-sm" style="margin-top:12px; margin-left:8px;" onclick="resetFillIn()">🔄 リセット</button>
+        <div id="fillInResult" style="margin-top:12px;"></div>
+      </div>
+
+      <!-- 逆引き練習 -->
+      <div class="glass-card" style="margin-top: 24px;">
+        <h3 style="font-size:16px; margin-bottom: 8px;">🔍 逆引き練習 — 構造式から名前を当てる</h3>
+        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">構造式を見て化合物名を答えましょう。</p>
+        <div id="reverseNaming"></div>
+        <button class="btn btn-primary" style="margin-top:12px;" onclick="checkReverse()">✅ 答え合わせ</button>
+        <button class="btn btn-sm" style="margin-top:12px; margin-left:8px;" onclick="resetReverse()">🔄 リセット</button>
+        <div id="reverseResult" style="margin-top:12px;"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
