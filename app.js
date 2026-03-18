@@ -1209,6 +1209,39 @@ function resetReverse() {
 }
 
 // ============================================================
+//  Trivial Name ⇔ IUPAC Name Table
+// ============================================================
+function renderTrivialNames() {
+  const el = $('#trivialNameTable');
+  if (!el) return;
+  el.innerHTML = TRIVIAL_NAMES.map(sec => `
+    <div class="glass-card" style="margin-bottom: 16px;">
+      <h4 style="font-size:14px; margin-bottom:10px; color:var(--accent-cyan);">${sec.section}</h4>
+      <table class="prefix-table" style="width:100%;">
+        <thead>
+          <tr>
+            <th style="width:22%;">慣用名</th>
+            <th style="width:30%;">IUPAC名</th>
+            <th style="width:18%;">分子式</th>
+            <th style="width:30%;">備考</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${sec.items.map(it => `
+            <tr>
+              <td style="font-weight:600; color:var(--accent-orange);">${it.trivial}</td>
+              <td style="font-family:var(--font-mono); font-size:12px; color:var(--accent-green);">${it.iupac}</td>
+              <td style="font-family:var(--font-mono); font-size:12px;">${it.formula}</td>
+              <td style="font-size:11px; color:var(--text-muted);">${it.note}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `).join('');
+}
+
+// ============================================================
 //  Initialization
 // ============================================================
 function init() {
@@ -1232,6 +1265,7 @@ function init() {
   updateFGFlashcard();
   renderFillIn();
   renderReverse();
+  renderTrivialNames();
   updateProgressBadge();
 }
 

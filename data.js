@@ -366,12 +366,48 @@ const AROMATIC_HC = {
 };
 
 const AROMATIC_QUIZ = [
-  { q: 'ベンゼンの分子式は？', options: ['C₅H₆', 'C₆H₆', 'C₆H₈', 'C₇H₈'], answer: 1, explanation: 'ベンゼンはC₆H₆。6個のCと6個のHで構成。DBE=4。', category: 'aromatic' },
-  { q: 'トルエンのIUPAC名は？', options: ['ethylbenzene', 'methylbenzene', 'phenylmethane', 'benzaldehyde'], answer: 1, explanation: 'トルエン(toluene)のIUPAC名はmethylbenzene。ベンゼンにメチル基が1つ。', category: 'aromatic' },
-  { q: 'パラ(para-)はベンゼン環の何位と何位？', options: ['1,2-', '1,3-', '1,4-', '1,5-'], answer: 2, explanation: 'para-(パラ)は1,4-位。対角の位置関係。', category: 'aromatic' },
-  { q: '芳香族性を示す条件(Hückel則)のπ電子数は？', options: ['2n個', '4n個', '4n+2個', '6n個'], answer: 2, explanation: 'Hückel則: 4n+2個のπ電子を持つ平面環状化合物が芳香族性を示す。ベンゼン(n=1)は6個。', category: 'aromatic' },
-  { q: 'ナフタレンの構造は？', options: ['ベンゼン環1つ', 'ベンゼン環2つが縮合', 'ベンゼン環3つが直線状', 'ベンゼン環2つが単結合で接続'], answer: 1, explanation: 'ナフタレン(C₁₀H₈)は2つのベンゼン環が辺を共有して縮合した構造。', category: 'aromatic' },
-  { q: 'フェニル基の構造式は？', options: ['C₆H₅-', 'C₆H₆', 'C₆H₅CH₂-', '-C₆H₄-'], answer: 0, explanation: 'フェニル基(phenyl)はC₆H₅-。ベンゼンからH1つを除いた残基。ベンジル基(benzyl)はC₆H₅CH₂-と区別する。', category: 'aromatic' }
+  {
+    category: 'aromatic',
+    question: 'ベンゼンの分子式は？',
+    answer: 'C₆H₆',
+    options: () => shuffleArray(['C₅H₆', 'C₆H₆', 'C₆H₈', 'C₇H₈']),
+    explanation: 'ベンゼンはC₆H₆。6個のCと6個のHで構成。DBE=4。'
+  },
+  {
+    category: 'aromatic',
+    question: 'トルエンのIUPAC名は？',
+    answer: 'methylbenzene',
+    options: () => shuffleArray(['ethylbenzene', 'methylbenzene', 'phenylmethane', 'benzaldehyde']),
+    explanation: 'トルエン(toluene)のIUPAC名はmethylbenzene。ベンゼンにメチル基が1つ。'
+  },
+  {
+    category: 'aromatic',
+    question: 'パラ(para-)はベンゼン環の何位と何位？',
+    answer: '1,4-',
+    options: () => shuffleArray(['1,2-', '1,3-', '1,4-', '1,5-']),
+    explanation: 'para-(パラ)は1,4-位。対角の位置関係。'
+  },
+  {
+    category: 'aromatic',
+    question: '芳香族性を示す条件(Hückel則)のπ電子数は？',
+    answer: '4n+2個',
+    options: () => shuffleArray(['2n個', '4n個', '4n+2個', '6n個']),
+    explanation: 'Hückel則: 4n+2個のπ電子を持つ平面環状化合物が芳香族性を示す。ベンゼン(n=1)は6個。'
+  },
+  {
+    category: 'aromatic',
+    question: 'ナフタレンの構造は？',
+    answer: 'ベンゼン環2つが縮合',
+    options: () => shuffleArray(['ベンゼン環1つ', 'ベンゼン環2つが縮合', 'ベンゼン環3つが直線状', 'ベンゼン環2つが単結合で接続']),
+    explanation: 'ナフタレン(C₁₀H₈)は2つのベンゼン環が辺を共有して縮合した構造。'
+  },
+  {
+    category: 'aromatic',
+    question: 'フェニル基の構造式は？',
+    answer: 'C₆H₅-',
+    options: () => shuffleArray(['C₆H₅-', 'C₆H₆', 'C₆H₅CH₂-', '-C₆H₄-']),
+    explanation: 'フェニル基(phenyl)はC₆H₅-。ベンゼンからH1つを除いた残基。ベンジル基(benzyl)はC₆H₅CH₂-と区別する。'
+  }
 ];
 
 // --------------------------------------------------
@@ -463,10 +499,10 @@ const BRANCHED_NAMING = {
       mainChain: "C3 (プロパン)",
       substituent: "2番にメチル基",
       structureDiagram: [
-        "    CH₃",
-        "     |",
-        "CH₃-CH-CH₃",
-        " 1   2   3" 
+        "   CH3",
+        "    |",
+        "CH3-CH-CH3",
+        " 1   2  3" 
       ],
       tip: "慣用名「イソブタン」。C4H₁₀のアルカンだが、直鎖ブタンとは異なる構造異性体。"
     },
@@ -474,71 +510,78 @@ const BRANCHED_NAMING = {
       name: "2-methylbutane",
       jp: "2-メチルブタン",
       structure: "CH₃-CH(CH₃)-CH₂-CH₃",
+
       mainChain: "C4 (ブタン)",
       substituent: "2番にメチル基",
       structureDiagram: [
-        "    CH₃",
-        "     |",
-        "CH₃-CH-CH₂-CH₃",
-        " 1   2   3   4"
+        "   CH3",
+        "    |",
+        "CH3-CH-CH2-CH3",
+        " 1   2  3   4"
       ],
       tip: "慣用名「イソペンタン」。なぜ3-メチルブタンではないか？→右から数えると3番だが、左から数えると2番。2が小さいので2-メチルブタン。"
     },
     {
       name: "2,2-dimethylpropane",
       jp: "2,2-ジメチルプロパン",
-      structure: "C(CH₃)₄",
+      structure: "CH₃-C(CH₃)₂-CH₃",
+      imagePath: "images/22dimethylpropane.png",
       mainChain: "C3 (プロパン)",
       substituent: "2番にメチル基×2個",
       structureDiagram: [
-        "     CH₃",
-        "      |",
-        "CH₃-C-CH₃",
-        "      |",
-        "     CH₃",
-        " 1   2   3"
+        "   CH3",
+        "    |",
+        "CH3-C-CH3",
+        "    |",
+        "   CH3",
+        "",
+        "C1  C2  C3 (主鎖)",
+        "+2個のCH3(置換基)"
       ],
-      tip: "慣用名「ネオペンタン」。中心の炭素に4つのメチル基が付いた対称的な構造。C5H₁₂。"
+      tip: "慣用名「ネオペンタン」。中心のCに4つのCH₃が付いた対称構造。C₅H₁₂。主鎖はC1-C2-C3の3炭素。"
     },
     {
-      name: "3-ethylpentane",
-      jp: "3-エチルペンタン",
-      structure: "CH₃-CH₂-CH(C₂H₅)-CH₂-CH₃",
-      mainChain: "C5 (ペンタン)",
-      substituent: "3番にエチル基",
+      name: "3-methylhexane",
+      jp: "3-メチルヘキサン",
+      structure: "CH₃-CH₂-CH(CH₃)-CH₂-CH₂-CH₃",
+      imagePath: "images/3methylhexane.png",
+      mainChain: "C6 (ヘキサン)",
+      substituent: "3番にメチル基",
       structureDiagram: [
-        "         C₂H₅",
-        "          |",
-        "CH₃-CH₂-CH-CH₂-CH₃",
-        " 1   2    3   4   5"
+        "        CH3",
+        "         |",
+        "CH3-CH2-CH-CH2-CH2-CH3",
+        " 1   2   3  4   5   6"
       ],
-      tip: "メチル基だけでなく、エチル基(-C₂H₅)も置換基になれる。"
+      tip: "主鎖は最も長い炭素鎖を選ぶ。この場合C6なのでヘキサンが主鎖。"
     },
     {
       name: "2,3-dimethylbutane",
       jp: "2,3-ジメチルブタン",
       structure: "CH₃-CH(CH₃)-CH(CH₃)-CH₃",
+      imagePath: "images/23dimethylbutane.png",
       mainChain: "C4 (ブタン)",
       substituent: "2番と3番にメチル基×各1個",
       structureDiagram: [
-        "    CH₃  CH₃",
-        "     |    |",
-        "CH₃-CH--CH-CH₃",
-        " 1   2    3   4"
+        "   CH3 CH3",
+        "    |   |",
+        "CH3-CH-CH-CH3",
+        " 1   2  3  4"
       ],
       tip: "同じ置換基が2つ → di-（ジ）をつける。2,3の位置番号はカンマで区切る。"
     },
     {
-      name: "2-methyl-3-ethylpentane",
-      jp: "2-メチル-3-エチルペンタン",
+      name: "3-ethyl-2-methylpentane",
+      jp: "3-エチル-2-メチルペンタン",
       structure: "CH₃-CH(CH₃)-CH(C₂H₅)-CH₂-CH₃",
+      imagePath: "images/2m3ethylpentane.png",
       mainChain: "C5 (ペンタン)",
       substituent: "2番にメチル基 + 3番にエチル基",
       structureDiagram: [
-        "    CH₃  C₂H₅",
-        "     |    |",
-        "CH₃-CH--CH-CH₂-CH₃",
-        " 1   2    3   4   5"
+        "   CH3 C2H5",
+        "    |   |",
+        "CH3-CH-CH-CH2-CH3",
+        " 1   2  3  4   5"
       ],
       tip: "異なる置換基が複数 → アルファベット順！ethyl(E)がmethyl(M)より先。ただし日本語では「メチル, エチル」の順も使われる。"
     }
@@ -1373,4 +1416,32 @@ const REVERSE_NAMING = [
   { structure: 'CH₃-COO-C₂H₅', answer: '酢酸エチル (ethyl acetate)', hint: 'エステル' },
   { structure: 'C₆H₅-CH₃', answer: 'トルエン (toluene)', hint: 'ベンゼン+メチル基' },
   { structure: 'C₆H₅-OH', answer: 'フェノール (phenol)', hint: 'ベンゼン+OH' }
+];
+
+// --------------------------------------------------
+//  慣用名 ⇔ IUPAC名 対応表
+// --------------------------------------------------
+const TRIVIAL_NAMES = [
+  { section: 'アルカン（分岐鎖）', items: [
+    { trivial: 'イソブタン', iupac: '2-methylpropane', formula: 'C₄H₁₀', note: '分岐C4アルカン' },
+    { trivial: 'イソペンタン', iupac: '2-methylbutane', formula: 'C₅H₁₂', note: '分岐C5アルカン' },
+    { trivial: 'ネオペンタン', iupac: '2,2-dimethylpropane', formula: 'C₅H₁₂', note: '高度分岐C5アルカン' },
+  ]},
+  { section: '芳香族化合物', items: [
+    { trivial: 'トルエン', iupac: 'methylbenzene', formula: 'C₇H₈', note: 'ベンゼン+CH₃' },
+    { trivial: 'キシレン', iupac: 'dimethylbenzene', formula: 'C₈H₁₀', note: 'ベンゼン+CH₃×2 (o/m/p)' },
+    { trivial: 'スチレン', iupac: 'ethenylbenzene', formula: 'C₈H₈', note: 'ベンゼン+ビニル基' },
+    { trivial: 'アニリン', iupac: 'phenylamine', formula: 'C₆H₅NH₂', note: 'ベンゼン+NH₂' },
+    { trivial: 'フェノール', iupac: 'phenol', formula: 'C₆H₅OH', note: 'ベンゼン+OH（IUPAC許容）' },
+  ]},
+  { section: '官能基を含む化合物', items: [
+    { trivial: 'ホルムアルデヒド', iupac: 'methanal', formula: 'HCHO', note: 'C1アルデヒド' },
+    { trivial: 'アセトアルデヒド', iupac: 'ethanal', formula: 'CH₃CHO', note: 'C2アルデヒド' },
+    { trivial: 'アセトン', iupac: 'propanone', formula: 'CH₃COCH₃', note: 'C3ケトン' },
+    { trivial: 'ギ酸', iupac: 'methanoic acid', formula: 'HCOOH', note: 'C1カルボン酸' },
+    { trivial: '酢酸', iupac: 'ethanoic acid', formula: 'CH₃COOH', note: 'C2カルボン酸' },
+    { trivial: 'エチレン', iupac: 'ethene', formula: 'C₂H₄', note: 'C2アルケン' },
+    { trivial: 'アセチレン', iupac: 'ethyne', formula: 'C₂H₂', note: 'C2アルキン' },
+    { trivial: 'グリセリン', iupac: 'propane-1,2,3-triol', formula: 'C₃H₈O₃', note: '3価アルコール' },
+  ]}
 ];
